@@ -643,7 +643,7 @@ async function loadReviews() {
     reviewsContainer.innerHTML = reviews
       .map(
         (r) => `
-        <div class="reviewBox">
+        <div class="review">
           <h4>${r.name}</h4>
           <div class="rating">⭐ ${r.rating}/5</div>
           <p>${r.message || ""}</p>
@@ -657,10 +657,12 @@ async function loadReviews() {
 }
 
 loadReviews();
+  
 </script>
 
 </body>
 </html>
+
 
 
 
