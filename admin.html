@@ -63,7 +63,7 @@ function login() {
 
 // FETCH BOOKINGS FROM BACKEND
 async function loadBookings() {
-  const res = await fetch("https://backendwithapi.onrender.com");
+  const res = await fetch("https://backendwithapi.onrender.com/api/bookings");
   const data = await res.json();
 
   const container = document.getElementById("bookingsList");
@@ -100,7 +100,7 @@ function closeModal() {
 
 // UPDATE STATUS API
 async function updateStatus(status) {
-  await fetch(`https://backendwithapi.onrender.com/${selectedBooking._id}`, {
+  await fetch(`https://backendwithapi.onrender.com/api/bookings/${selectedBooking._id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status })
@@ -113,7 +113,7 @@ async function updateStatus(status) {
 
 // SEND WHATSAPP MESSAGEs
 async function sendWhatsapp() {
-  await fetch(`https://backendwithapi.onrender.com/whatsapp/send`, {
+  await fetch(`https://backendwithapi.onrender.com/api/whatsapp/send`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ phone: selectedBooking.phone, name: selectedBooking.name, status: selectedBooking.status })
@@ -124,3 +124,4 @@ async function sendWhatsapp() {
 </script>
 </body>
 </html>
+
