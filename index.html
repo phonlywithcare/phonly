@@ -555,7 +555,7 @@ bookingForm.addEventListener("submit", async (e) => {
   bookingMsg.style.color = "#1a7b4f";
 
   try {
-    const res = await fetch(`${https://backendwithapi.onrender.com/api/bookings}/api/bookings`, {
+    const res = await fetch(`${https://backendwithapi.onrender.com}/api/bookings`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, phone, device, service, address, datetime }),
@@ -600,7 +600,7 @@ reviewForm.addEventListener("submit", async (e) => {
   reviewMsg.style.color = "#1a7b4f";
 
   try {
-    const res = await fetch(`${https://backendwithapi.onrender.com/api/reviews}/api/reviews`, {
+    const res = await fetch(`${https://backendwithapi.onrender.com}/api/reviews`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, rating, message }),
@@ -632,7 +632,7 @@ async function loadReviews() {
   reviewsContainer.innerHTML = "<p>Loading reviews...</p>";
 
   try {
-    const res = await fetch(`${https://backendwithapi.onrender.com/api/reviews}/api/reviews`);
+    const res = await fetch(`${https://backendwithapi.onrender.com}/api/reviews`);
     const reviews = await res.json();
 
     if (!Array.isArray(reviews)) {
@@ -661,6 +661,7 @@ loadReviews();
 
 </body>
 </html>
+
 
 
 
