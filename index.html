@@ -374,8 +374,7 @@
             <div style="margin-top:12px;" class="form-row">
               <div class="field">
                 <label for="datetime">Preferred date & time</label>
-                <input id="datetime" type="datetime-local" />
-              </div>
+                <input id="datetime" type="datetime-local" required /> </div>
               <div class="field">
                 <label>&nbsp;</label>
                 <button type="submit" class="btn" style="width:100%">Confirm booking</button>
@@ -464,28 +463,6 @@
         </div>
       </section>
 
-      <section id="statusCheck" aria-labelledby="statusHeading">
-        <h2 id="statusHeading" style="color:#e8fff0;margin:10px 0">Check Booking Status</h2>
-        <div class="card">
-          <h3>Check your repair status</h3>
-          <p class="muted">Enter the unique Booking ID you received upon confirmation.</p>
-
-          <form id="statusForm" novalidate>
-            <div class="form-row">
-              <div class="field" style="flex:2">
-                <label for="bookingIdInput">Booking ID</label>
-                <input id="bookingIdInput" type="text" required placeholder="e.g., A5B6C7D" style="text-transform:uppercase"/>
-              </div>
-              <div class="field" style="flex:1">
-                <label>&nbsp;</label>
-                <button type="submit" class="btn" style="width:100%">Check Status</button>
-              </div>
-            </div>
-            <div id="statusResult" style="margin-top:12px;padding:12px;border-radius:10px;background:#f0f0f0;color:#235135;display:none;">
-              </div>
-          </form>
-        </div>
-      </section>
       <section aria-labelledby="reviewsHeading">
         <h2 id="reviewsHeading" style="color:#e8fff0;margin:10px 0">Customer reviews</h2>
 
@@ -565,8 +542,9 @@ bookingForm.addEventListener("submit", async (e) => {
   const address = $("address").value.trim();
   const datetime = $("datetime").value;
 
-  if (!name || !phone || !device || !service || !address) {
-    bookingMsg.textContent = "Please fill required fields.";
+  // Updated validation to include datetime
+  if (!name || !phone || !device || !service || !address || !datetime) {
+    bookingMsg.textContent = "Please fill all required fields, including date & time.";
     bookingMsg.style.color = "#cc2020";
     return;
   }
@@ -584,68 +562,19 @@ bookingForm.addEventListener("submit", async (e) => {
     const data = await res.json();
 
     if (res.ok) {
-      // UPDATED: Display the generated booking ID from the server
-      bookingMsg.textContent = `Booking sent successfully! Your Booking ID is: ${data.bookingId}. Please save it to check your status.`;
+      bookingMsg.textContent = "Booking sent successfully! We will call you soon.";
       bookingMsg.style.color = "#1a7b4f";
       bookingForm.reset();
     } else {
-      bookingMsg.textContent = data.message || "Server error";
+      // The server will now log the detailed error, helping you debug deployment issues
+      bookingMsg.textContent = data.message || "Server error. Check backend logs.";
       bookingMsg.style.color = "#cc2020";
     }
   } catch (err) {
-    bookingMsg.textContent = "Network error";
+    bookingMsg.textContent = "Network error. Is the backend URL correct?";
     bookingMsg.style.color = "#cc2020";
   }
 });
-
-// --------------------------------------------
-// BOOKING STATUS CHECK
-// --------------------------------------------
-const statusForm = $("statusForm");
-const statusResult = $("statusResult");
-
-statusForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  // Get the ID and convert to uppercase to match server-side generation
-  const bookingId = $("bookingIdInput").value.trim().toUpperCase();
-
-  if (!bookingId) {
-    statusResult.style.display = 'block';
-    statusResult.style.background = '#fde6e6';
-    statusResult.innerHTML = "Please enter your Booking ID.";
-    return;
-  }
-  
-  statusResult.style.display = 'block';
-  statusResult.style.background = '#e6f6e8';
-  statusResult.innerHTML = "Checking status...";
-
-  try {
-    // NEW: Fetch status using the unique ID
-    const res = await fetch(`${backend}/api/bookings/${bookingId}`);
-    const data = await res.json();
-
-    if (res.ok) {
-      const statusColor = data.status === 'Pending' ? '#b45309' : '#10b981';
-      
-      statusResult.style.background = '#e6f6e8';
-      statusResult.innerHTML = `
-        <p style="margin:0 0 4px 0;"><strong>Booking ID:</strong> ${data.id}</p>
-        <p style="margin:0 0 4px 0;"><strong>Status:</strong> <span style="font-weight:700; color:${statusColor};">${data.status}</span></p>
-        <p style="margin:0 0 4px 0;"><strong>Device/Service:</strong> ${data.device} - ${data.service}</p>
-        <p style="margin:0;"><strong>Appointment:</strong> ${data.datetime}</p>
-      `;
-    } else {
-      statusResult.style.background = '#fde6e6';
-      statusResult.innerHTML = data.message || "Booking ID not found or server error.";
-    }
-  } catch (err) {
-    statusResult.style.background = '#fde6e6';
-    statusResult.innerHTML = "Network error. Could not connect to the server.";
-  }
-});
-
 
 // --------------------------------------------
 // REVIEWS — SUBMIT
