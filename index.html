@@ -291,7 +291,6 @@
   <div class="container">
     <header>
       <a class="brand" href="#">
-        <!-- Replace logo.png with your uploaded file -->
         <img src="/logo.png.png" alt="Phonly logo" id="logoImg" onerror="this.style.display='none'"/>
         <div>
           <h1>Phonly</h1>
@@ -375,8 +374,7 @@
             <div style="margin-top:12px;" class="form-row">
               <div class="field">
                 <label for="datetime">Preferred date & time</label>
-                <input id="datetime" type="datetime-local" />
-              </div>
+                <input id="datetime" type="datetime-local" required /> </div>
               <div class="field">
                 <label>&nbsp;</label>
                 <button type="submit" class="btn" style="width:100%">Confirm booking</button>
@@ -471,8 +469,7 @@
         <div style="display:grid;grid-template-columns:1fr 320px;gap:16px">
           <div>
             <div class="reviews-list" id="reviewsList">
-              <!-- reviews inserted here -->
-            </div>
+              </div>
           </div>
 
           <aside class="card">
@@ -545,8 +542,9 @@ bookingForm.addEventListener("submit", async (e) => {
   const address = $("address").value.trim();
   const datetime = $("datetime").value;
 
-  if (!name || !phone || !device || !service || !address) {
-    bookingMsg.textContent = "Please fill required fields.";
+  // Updated validation to include datetime
+  if (!name || !phone || !device || !service || !address || !datetime) {
+    bookingMsg.textContent = "Please fill all required fields, including date & time.";
     bookingMsg.style.color = "#cc2020";
     return;
   }
@@ -564,15 +562,16 @@ bookingForm.addEventListener("submit", async (e) => {
     const data = await res.json();
 
     if (res.ok) {
-      bookingMsg.textContent = "Booking sent successfully!";
+      bookingMsg.textContent = "Booking sent successfully! We will call you soon.";
       bookingMsg.style.color = "#1a7b4f";
       bookingForm.reset();
     } else {
-      bookingMsg.textContent = data.message || "Server error";
+      // The server will now log the detailed error, helping you debug deployment issues
+      bookingMsg.textContent = data.message || "Server error. Check backend logs.";
       bookingMsg.style.color = "#cc2020";
     }
   } catch (err) {
-    bookingMsg.textContent = "Network error";
+    bookingMsg.textContent = "Network error. Is the backend URL correct?";
     bookingMsg.style.color = "#cc2020";
   }
 });
@@ -661,10 +660,3 @@ loadReviews();
 
 </body>
 </html>
-
-
-
-
-
-
-
