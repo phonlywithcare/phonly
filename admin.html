@@ -207,66 +207,75 @@
   </div>
 
   <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
-
-  <script>
+<script>
     let selectedBooking = null;
-    let allBookings = []; // Store locally for search filtering
+    let allBookings = [];
 
-    // --- UTILITIES ---
-    
-    // Professional Toast Notification
+    // TOAST
     function showToast(message, type = 'success') {
         const container = document.getElementById('toastContainer');
         const toast = document.createElement('div');
-        const colorClass = type === 'success' ? 'bg-gray-800 text-white' : 'bg-red-500 text-white';
-        const icon = type === 'success' ? '<i class="ph ph-check-circle text-green-400"></i>' : '<i class="ph ph-warning-circle"></i>';
-        
-        toast.className = `toast flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-sm font-medium ${colorClass}`;
-        toast.innerHTML = `${icon} <span>${message}</span>`;
-        
-        container.appendChild(toast);
-        
-        // Trigger animation
-        setTimeout(() => toast.classList.add('show'), 10);
 
-        // Remove after 3 seconds
+        const colorClass = type === 'success'
+            ? 'bg-gray-800 text-white'
+            : 'bg-red-500 text-white';
+
+        const icon = type === 'success'
+            ? '<i class="ph ph-check-circle text-green-300"></i>'
+            : '<i class="ph ph-warning-circle"></i>';
+
+        toast.className = `toast flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-sm font-medium ${colorClass}`;
+        toast.innerHTML = `${icon}<span>${message}</span>`;
+        container.appendChild(toast);
+
+        setTimeout(() => toast.classList.add('show'), 10);
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 500);
         }, 3000);
     }
 
-    // Status Badge Helper
+    // STATUS BADGE
     function getStatusBadge(status) {
-        status = status.toLowerCase();
-        if (status === 'completed') return '<span class="px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold border border-green-200">Completed</span>';
-        if (status === 'accepted') return '<span class="px-2 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold border border-blue-200">Accepted</span>';
-        if (status === 'ontheway') return '<span class="px-2 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-bold border border-orange-200">On The Way</span>';
-        return '<span class="px-2 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-bold border border-gray-200">Pending</span>';
+        status = status?.toLowerCase() || "pending";
+
+        const styles = {
+            completed: "bg-green-100 text-green-700 border-green-200",
+            accepted: "bg-blue-100 text-blue-700 border-blue-200",
+            ontheway: "bg-orange-100 text-orange-700 border-orange-200",
+            pending: "bg-gray-100 text-gray-600 border-gray-200"
+        };
+
+        const labels = {
+            completed: "Completed",
+            accepted: "Accepted",
+            ontheway: "On The Way",
+            pending: "Pending"
+        };
+
+        return `<span class="px-2 py-1 rounded-full text-xs font-bold border ${styles[status]}">${labels[status]}</span>`;
     }
 
-    // --- AUTHENTICATION ---
-
-    // Check session on load
-    if(localStorage.getItem("admin") === "true") {
+    // LOGIN
+    if (localStorage.getItem("admin") === "true") {
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('dashboardScreen').classList.remove('hidden');
         loadBookings();
     }
 
     function login() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+        const email = emailInput.value;
+        const password = passwordInput.value;
 
-      if (email === "admin@phonly.com" && password === "123456") {
-        localStorage.setItem("admin", "true");
-        document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('dashboardScreen').classList.remove('hidden');
-        showToast("Welcome back, Admin!");
-        loadBookings();
-      } else {
-        showToast("Invalid Credentials", "error");
-      }
+        if (email === "admin@phonly.com" && password === "123456") {
+            localStorage.setItem("admin", "true");
+            loginScreen.classList.add('hidden');
+            dashboardScreen.classList.remove('hidden');
+            showToast("Welcome back, Admin!");
+            loadBookings();
+        } else {
+            showToast("Invalid Credentials", "error");
+        }
     }
 
     function logout() {
@@ -274,165 +283,141 @@
         location.reload();
     }
 
-    // --- DATA HANDLING ---
-
+    // LOAD BOOKINGS
     async function loadBookings() {
-      const container = document.getElementById("bookingsList");
-      const loading = document.getElementById("loadingState");
-      
-      container.innerHTML = "";
-      loading.classList.remove("hidden"); // Show spinner
+        const container = bookingsList;
+        const loading = loadingState;
 
-      try {
-          const res = await fetch("https://backendwithapi.onrender.com/api/bookings");
-          const data = await res.json();
-          allBookings = data; // Save to global variable for filtering
-          renderTable(allBookings);
-          calculateStats(allBookings);
-      } catch (error) {
-          showToast("Failed to fetch bookings", "error");
-      } finally {
-          loading.classList.add("hidden"); // Hide spinner
-      }
+        container.innerHTML = "";
+        loading.classList.remove("hidden");
+
+        try {
+            const res = await fetch("https://backendwithapi.onrender.com/api/bookings");
+            const data = await res.json();
+
+            allBookings = data;
+            renderTable(data);
+            calculateStats(data);
+        } catch (err) {
+            showToast("Failed to load bookings", "error");
+        }
+
+        loading.classList.add("hidden");
     }
 
     function calculateStats(data) {
-        document.getElementById('statTotal').innerText = data.length;
-        document.getElementById('statPending').innerText = data.filter(b => !b.status || b.status === 'pending').length;
-        document.getElementById('statCompleted').innerText = data.filter(b => b.status === 'completed').length;
+        statTotal.innerText = data.length;
+        statPending.innerText = data.filter(b => !b.status || b.status === "pending").length;
+        statCompleted.innerText = data.filter(b => b.status === "completed").length;
     }
 
+    // RENDER LIST
     function renderTable(data) {
-        const container = document.getElementById("bookingsList");
+        const container = bookingsList;
         const emptyState = document.getElementById("emptyState");
+
         container.innerHTML = "";
 
-        if(data.length === 0) {
-            emptyState.classList.remove('hidden');
+        if (data.length === 0) {
+            emptyState.classList.remove("hidden");
             return;
-        } else {
-            emptyState.classList.add('hidden');
         }
 
-        data.forEach(b => {
-            const tr = document.createElement("tr");
-            tr.className = "hover:bg-gray-50 transition border-b border-gray-50 last:border-0";
-            
-            // Safe JSON stringify for the button
-            const jsonString = JSON.stringify(b).replace(/"/g, '&quot;');
+        emptyState.classList.add("hidden");
 
-            tr.innerHTML = `
-            <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
-                    <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-xs">
-                        ${b.name.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                        <div class="font-semibold text-gray-900">${b.name}</div>
-                        <div class="text-xs text-gray-500">${b.phone}</div>
-                    </div>
-                </div>
-            </td>
-            <td class="px-6 py-4 text-gray-600">
-                <div class="flex items-center gap-2">
-                    <i class="ph ph-device-mobile text-lg text-gray-400"></i>
-                    ${b.device}
-                </div>
-            </td>
-            <td class="px-6 py-4">
-                ${getStatusBadge(b.status || 'pending')}
-            </td>
-            <td class="px-6 py-4 text-right">
-                <button onclick="openModal('${b._id}')" class="text-green-600 hover:text-green-800 font-medium text-sm border border-green-200 hover:border-green-600 px-3 py-1 rounded-lg transition">
-                    Manage
-                </button>
-            </td>
+        data.forEach(b => {
+            container.innerHTML += `
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-2">
+                            <div class="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold">
+                                ${b.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <div class="font-semibold">${b.name}</div>
+                                <div class="text-xs text-gray-500">${b.phone}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">${b.device}</td>
+                    <td class="px-6 py-4">${getStatusBadge(b.status)}</td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="openModal('${b._id}')" class="text-green-600 border border-green-300 px-3 py-1 rounded-lg hover:bg-green-50">
+                            Manage
+                        </button>
+                    </td>
+                </tr>
             `;
-            container.appendChild(tr);
         });
     }
 
+    // SEARCH
     function filterBookings() {
-        const query1 = document.getElementById('searchInput').value.toLowerCase();
-        const query2 = document.getElementById('mobileSearch').value.toLowerCase();
-        const query = query1 || query2;
+        const q1 = searchInput?.value.toLowerCase() || "";
+        const q2 = mobileSearch?.value.toLowerCase() || "";
+        const q = q1 || q2;
 
-        const filtered = allBookings.filter(b => 
-            b.name.toLowerCase().includes(query) || 
-            b.phone.includes(query) || 
-            b.device.toLowerCase().includes(query)
+        const filtered = allBookings.filter(b =>
+            b.name.toLowerCase().includes(q) ||
+            b.phone.includes(q) ||
+            b.device.toLowerCase().includes(q)
         );
+
         renderTable(filtered);
     }
 
-    // --- MODAL ACTIONS ---
-
+    // MODAL
     function openModal(id) {
-        // Find the specific object from our global array
-        const b = allBookings.find(item => item._id === id);
-        if(!b) return;
+        const b = allBookings.find(x => x._id === id);
+        if (!b) return;
 
         selectedBooking = b;
-        
-        document.getElementById("modalInitials").innerText = b.name.charAt(0).toUpperCase();
-        document.getElementById("modalName").innerText = b.name;
-        document.getElementById("modalPhone").innerText = b.phone;
-        document.getElementById("modalDevice").innerText = b.device;
-        document.getElementById("modalIssue").innerText = b.issue;
-        document.getElementById("modalStatus").innerHTML = getStatusBadge(b.status || 'pending');
 
-        document.getElementById("modal").classList.remove("hidden");
+        modalInitials.innerText = b.name.charAt(0).toUpperCase();
+        modalName.innerText = b.name;
+        modalPhone.innerText = b.phone;
+        modalDevice.innerText = b.device;
+        modalIssue.innerText = b.issue;
+        modalStatus.innerHTML = getStatusBadge(b.status);
+
+        modal.classList.remove("hidden");
     }
 
     function closeModal() {
-      document.getElementById("modal").classList.add("hidden");
+        modal.classList.add("hidden");
     }
 
+    // UPDATE STATUS
     async function updateStatus(status) {
-      if(!selectedBooking) return;
-      
-      // Optimistic UI Update (Change UI before server responds)
-      document.getElementById("modalStatus").innerHTML = getStatusBadge(status);
+        if (!selectedBooking) return;
 
-      try {
-        await fetch(`https://backendwithapi.onrender.com/api/bookings/${selectedBooking._id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status })
-        });
-        showToast(`Status updated to ${status}`);
-        loadBookings(); // Refresh background data
-      } catch(e) {
-        showToast("Error updating status", "error");
-      }
-    }
-
-    async function sendWhatsapp() {
-        const btn = document.getElementById('waButton');
-        const originalText = btn.innerHTML;
-        
-        // Loading state for button
-        btn.innerHTML = '<i class="ph ph-spinner animate-spin text-xl"></i> Sending...';
-        btn.disabled = true;
+        modalStatus.innerHTML = getStatusBadge(status);
 
         try {
-            await fetch(`https://backendwithapi.onrender.com/api/whatsapp/send`, {
-                method: "POST",
+            await fetch(`https://backendwithapi.onrender.com/api/bookings/${selectedBooking._id}`, {
+                method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    phone: selectedBooking.phone, 
-                    name: selectedBooking.name, 
-                    status: selectedBooking.status 
-                })
+                body: JSON.stringify({ status })
             });
-            showToast("WhatsApp notification sent!");
-        } catch(e) {
-            showToast("Failed to send WhatsApp", "error");
-        } finally {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
+
+            showToast(`Status updated to ${status}`);
+            loadBookings();
+        } catch (err) {
+            showToast("Failed to update status", "error");
         }
     }
-  </script>
+
+    // WHATSAPP MESSAGE
+    function sendWhatsapp() {
+        if (!selectedBooking) return;
+
+        const msg = encodeURIComponent(
+            `Hello ${selectedBooking.name},\n\nYour booking status has been updated.\n\nStatus: ${selectedBooking.status}\nDevice: ${selectedBooking.device}\nIssue: ${selectedBooking.issue}\n\nThank you!`
+        );
+
+        window.open(`https://wa.me/${selectedBooking.phone}?text=${msg}`, "_blank");
+    }
+</script>
+
 </body>
 </html>
