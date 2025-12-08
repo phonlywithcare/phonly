@@ -1,0 +1,881 @@
+/* ================= GLOBAL STYLES ================= */
+:root {
+  --primary: #45c647;
+  --primary-light: #e9f0ff;
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --text: #1a1f36;
+  --muted: #6d7485;
+  --radius: 18px;
+  --border: #e3e8f1;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ================= HEADER ================= */
+.header {
+  background: var(--surface);
+  padding: 22px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: var(--shadow);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-text h1 {
+  font-size: 26px;
+  font-weight: 900;
+  margin: 0;
+}
+
+.brand-text p {
+  margin: 0;
+  margin-top: -4px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  font-weight: 600;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 17px;
+}
+
+.login-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* ================= HERO ================= */
+.hero {
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-text h2 {
+  font-size: 42px;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+
+.hero-text p {
+  color: var(--muted);
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.primary-btn {
+  background: var(--primary);
+  color: white;
+  padding: 14px 26px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.hero-img {
+  width: 420px;
+  height: 330px;
+  background: var(--primary-light);
+  border-radius: var(--radius);
+}
+
+/* ================= SERVICES ================= */
+.services {
+  max-width: 1200px;
+  margin: 80px auto;
+  text-align: center;
+}
+
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 26px;
+  margin-top: 20px;
+}
+
+.service-card {
+  background: var(--surface);
+  padding: 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: 0.25s;
+  text-align: center;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+}
+
+.service-card img {
+  width: 90px;
+  height: 90px;
+}
+
+/* ================= REVIEWS ================= */
+.reviews {
+  max-width: 1200px;
+  margin: 80px auto;
+  text-align: center;
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 26px;
+  margin-top: 20px;
+}
+
+.review-card {
+  background: var(--surface);
+  padding: 26px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.stars {
+  color: #ffb400;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+/* ================= FOOTER ================= */
+.footer {
+  background: #121620;
+  color: white;
+  padding: 60px 40px;
+}
+
+.footer-grid {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #2a2f3a;
+  color: #cbd0da;
+}
+
+/* ================= POPUPS ================= */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.popup-box {
+  background: white;
+  padding: 30px;
+  width: 380px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  animation: fadeIn 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.popup-btn {
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: white;
+  cursor: pointer;
+  font-weight: 700;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.close-btn {
+  padding: 12px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Booking Form Specific Styles */
+
+/* Popup Background */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(8px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Booking Form Box */
+.popup-box {
+  background: #ffffff;
+  width: 420px;
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+  animation: formPop 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.popup-box h2 {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+/* Inputs */
+.popup-box input,
+.popup-box select {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #e6e6e6;
+  background: #f9f9fb;
+  font-size: 16px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.popup-box input:focus,
+.popup-box select:focus {
+  border-color: #2ecc71;
+  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.25);
+  background: #ffffff;
+}
+
+/* Confirm Button */
+.primary-btn {
+  background: #2ecc71;
+  padding: 14px;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.primary-btn:hover {
+  background: #27ae60;
+  transform: translateY(-2px);
+}
+
+/* Close Button */
+.close-btn {
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  background: #ff5252;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  background: #e04444;
+}
+
+/* Animation */
+@keyframes formPop {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ================= OFFERS & DEALS SECTION ================= */
+.offers {
+padding: 70px 20px;
+text-align: center;
+}
+
+
+.offers h2 {
+font-size: 34px;
+font-weight: 800;
+margin-bottom: 10px;
+}
+
+
+.offer-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 22px;
+margin-top: 30px;
+}
+
+
+.offer-card {
+background: #ffffff;
+padding: 25px;
+border-radius: 18px;
+box-shadow: 0 10px 35px rgba(0,0,0,0.07);
+transition: 0.3s ease;
+border: 1px solid #e9e9e9;
+}
+
+
+.offer-card:hover {
+transform: translateY(-8px);
+box-shadow: 0 20px 35px rgba(0,0,0,0.12);
+}
+
+
+.offer-card h3 {
+font-size: 22px;
+font-weight: 700;
+margin-bottom: 8px;
+color: #1a1f36;
+}
+
+
+.offer-card p {
+font-size: 15px;
+color: #555;
+margin-bottom: 12px;
+}
+
+
+.offer-tag {
+background: #ffe7e7;
+color: #d64545;
+padding: 6px 12px;
+font-size: 13px;
+border-radius: 12px;
+display: inline-block;
+font-weight: 700;
+}
+
+
+.offer-tag.green {
+background: #e8f9f0;
+color: #2ecc71;
+}
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+/* ---------- Tablet Screens ---------- */
+@media (max-width: 992px) {
+
+  .header {
+    padding: 20px;
+  }
+
+  .nav-links {
+    gap: 18px;
+  }
+
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    gap: 30px;
+  }
+
+  .hero-img {
+    width: 100%;
+    height: 260px;
+  }
+
+  .services,
+  .reviews {
+    padding: 0 20px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ---------- Mobile Screens ---------- */
+@media (max-width: 768px) {
+
+  /* Header Nav turns into stacked menu */
+  .nav-links {
+    display: none;
+  }
+
+  .header {
+    justify-content: space-between;
+  }
+
+  /* Mobile menu button */
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  /* Hero Section */
+  .hero-text h2 {
+    font-size: 32px;
+  }
+
+  .hero-text p {
+    font-size: 16px;
+  }
+
+  .hero-img {
+    height: 220px;
+  }
+
+  /* Offer Grid */
+  .offer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Service cards bigger spacing */
+  .service-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Reviews */
+  .review-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Footer */
+  .footer-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+/* ---------- Small Mobile (≤ 480px) ---------- */
+@media (max-width: 480px) {
+
+  .header-left h1 {
+    font-size: 20px;
+  }
+
+  .logo {
+    width: 44px;
+    height: 44px;
+  }
+
+  .hero-text h2 {
+    font-size: 26px;
+  }
+
+  .primary-btn {
+    font-size: 16px;
+    padding: 12px 18px;
+  }
+
+  .service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .popup-box {
+    width: 90%;
+  }
+}
+
+/* ================= RESPONSIVE NAV & MOBILE LAYOUT ================= */
+
+/* Hide toggle on wide screens; show on small */
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Hamburger lines */
+.menu-toggle .hamburger,
+.menu-toggle .hamburger::before,
+.menu-toggle .hamburger::after {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  position: relative;
+  transition: transform .25s ease, opacity .25s ease;
+}
+.menu-toggle .hamburger::before,
+.menu-toggle .hamburger::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+.menu-toggle .hamburger::before { transform: translateY(-7px); }
+.menu-toggle .hamburger::after  { transform: translateY(7px); }
+
+/* When open, animate to X */
+.menu-toggle.open .hamburger {
+  background: transparent;
+}
+.menu-toggle.open .hamburger::before {
+  transform: rotate(45deg);
+}
+.menu-toggle.open .hamburger::after {
+  transform: rotate(-45deg);
+}
+
+/* MOBILE: breakpoint */
+@media (max-width: 900px) {
+  .header {
+    padding: 14px 18px;
+    gap: 10px;
+  }
+
+  .brand-text h1 { font-size: 20px; }
+  .brand-text p { font-size: 12px; }
+
+  /* hide regular nav inline links, enable mobile nav as panel */
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 280px;
+    max-width: 85%;
+    transform: translateX(100%);
+    transition: transform .32s cubic-bezier(.2,.9,.2,1);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 80px 20px 20px 20px;
+    background: var(--surface);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    border-left: 1px solid var(--border);
+    z-index: 1500;
+    align-items: flex-start;
+  }
+
+  /* Hide inline nav in header flow so hamburger shows */
+  .nav-links a,
+  .nav-links .login-btn {
+    width: 100%;
+    display: block;
+    padding: 12px 14px;
+    border-radius: 12px;
+    text-align: left;
+    background: transparent;
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .nav-links a:hover,
+  .nav-links .login-btn:hover {
+    background: var(--primary-light);
+    color: var(--text);
+    transform: none;
+  }
+
+  /* When nav is open */
+  .nav-links.open {
+    transform: translateX(0);
+  }
+
+  /* show hamburger */
+  .menu-toggle { display: flex; align-items: center; justify-content: center; }
+
+  /* slightly smaller hero and stack vertically */
+  .hero {
+    margin: 28px 18px;
+    padding: 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .hero-img { width: 100%; height: 220px; }
+
+  /* Footer grid stacks */
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+/* Prevent body scroll when menu open */
+body.nav-open {
+  overflow: hidden;
+}
+
+/* Optional overlay dim (uses existing popup background color) */
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 1400;
+  display: none;
+}
+.nav-overlay.show { display: block; }
+
+
+/* ================= STATUS PAGE ================= */
+
+.status-container {
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 30px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.status-container .input-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+  color: var(--text);
+}
+
+.status-container .input-group input {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: #f9fafc;
+  font-size: 16px;
+  outline: none;
+  transition: .2s;
+}
+
+.status-container .input-group input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(69, 198, 71, 0.25);
+  background: #fff;
+}
+
+.status-btn {
+  width: 100%;
+  background: var(--primary);
+  padding: 14px;
+  border-radius: var(--radius);
+  color: white;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: .25s;
+}
+
+.status-btn:hover {
+  background: #2ebf40;
+  transform: translateY(-2px);
+}
+
+#resultBox {
+  margin-top: 25px;
+  padding: 20px;
+  background: var(--primary-light);
+  border-radius: var(--radius);
+  border-left: 6px solid var(--primary);
+  display: none;
+}
+
+.status-badge {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* GIVE REVIEW SECTION */
+.give-review {
+  width: 90%;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #f4fff4;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Make Give Review look exactly like a review-card */
+.give-review {
+  width: 100%;
+  max-width: 900px;
+  margin: 20px auto 20px auto;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 25px 30px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  border-left: 5px solid #18a51a;   /* Same as review cards */
+}
+
+/* Heading */
+.give-review h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #222;
+  font-weight: 700;
+}
+
+/* Sub text */
+.give-review .section-sub {
+  font-size: 14px;
+  color: #6d6d6d;
+  margin-bottom: 15px;
+}
+
+/* Star rating */
+.star-rating {
+  display: flex;
+  gap: 10px;
+  font-size: 30px;
+  margin: 10px 0 20px 0;
+  cursor: pointer;
+}
+
+.star {
+  color: #d8d8d8;
+  transition: 0.2s;
+}
+
+.star.selected,
+.star:hover {
+  color: #ffb400;
+}
+
+/* Inputs = match rounded review card style */
+.review-form input,
+.review-form textarea {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  border: 1px solid #e2e2e2;
+  background: #fafafa;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.review-form input:focus,
+.review-form textarea:focus {
+  outline: none;
+  border-color: #18a51a;
+  background: #ffffff;
+}
+
+/* Button styled like theme buttons */
+.review-form button {
+  width: 100%;
+  padding: 14px;
+  background: #18a51a;
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  font-size: 17px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.review-form button:hover {
+  background: #128512;
+}
+
+/* ================= TOAST POPUP ================= */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #18a51a;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.3s ease;
+  z-index: 20000;
+}
+
