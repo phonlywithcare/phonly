@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phonly - Repair Status Check</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="header-left">
+      <img src="./new icon.png" class="logo">
+      <div class="brand-text">
+        <h1>Phonly</h1>
+        <p>Phone Repair at Home</p>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a href="./index.html">Home</a>
+      <a href="./index.html#services">Services</a>
+      <a href="./Status.html">Check Status</a>
+      <button class="login-btn">Login</button>
+    </nav>
+  </header>
+
+  <div class="status-container">
+    <h2>Check Your Repair Status</h2>
+
+    <div class="input-group">
+      <label>Enter Booking ID</label>
+      <input type="text" id="bookingId" placeholder="e.g. PHN-58291" />
+    </div>
+
+    <button class="status-btn" onclick="checkStatus()">Check Status</button>
+
+    <div id="resultBox" class="status-result"></div>
+  </div>
+
+
+  <script>
+    async function checkStatus() {
+      const id = document.getElementById('bookingId').value.trim();
+      const resBox = document.getElementById('resultBox');
+
+      if (!id) {
+        resBox.style.display = 'block';
+        resBox.innerHTML = `<strong>Please enter a Booking ID.</strong>`;
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://backendwithapi.onrender.com/api/bookings/${id}`);
+        const data = await res.json();
+
+        if (!res.ok) {
+          resBox.style.display = 'block';
+          resBox.innerHTML = `<strong>No booking found with this ID.</strong>`;
+          return;
+        }
+
+        resBox.style.display = 'block';
+        resBox.innerHTML = `
+          <h3>Booking Details</h3>
+          <p><strong>Booking ID:</strong> ${data.bookingId}</p>
+          <p><strong>Name:</strong> ${data.name}</p>
+          <p><strong>Phone:</strong> ${data.phone}</p>
+          <p><strong>Device:</strong> ${data.device}</p>
+          <p><strong>Service:</strong> ${data.service || data.issue}</p>
+          <p><strong>Date:</strong> ${data.datetime || data.date || 'N/A'}</p>
+          <p><strong>Status:</strong> <span class="status-badge">${data.status}</span></p>
+        `;
+      } catch (e) {
+        resBox.style.display = 'block';
+        resBox.innerHTML = `<strong>Server connection error.</strong>`;
+      }
+    }
+  </script>
+
+</body>
+</html>
