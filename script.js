@@ -83,113 +83,33 @@ if (bookingBtn) {
 }
 
 
-// ================= STAR RATING ================= //
-let selectedRating = 5;
-
-const stars = document.querySelectorAll("#starRating .star");
-
-stars.forEach((star) => {
-  star.addEventListener("click", () => {
-    selectedRating = Number(star.dataset.value);
-
-    stars.forEach((s) => s.classList.remove("active"));
-    for (let i = 0; i < selectedRating; i++) {
-      stars[i].classList.add("active");
-    }
-  });
-});
-
-// ================= STAR RATING FIX =================
-let selectedRating = 0;
-
-const stars = document.querySelectorAll("#starRating .star");
-
-stars.forEach((star, index) => {
-  star.addEventListener("click", () => {
-    selectedRating = index + 1;
-
-    stars.forEach((s, i) => {
-      s.classList.toggle("active", i < selectedRating);
-    });
-  });
-});
-
-
-
-
-// ================= REVIEW SUBMIT ================= //
+// ================= REVIEW SUBMIT (CONNECTED TO BACKEND) ================= //
 const reviewForm = document.getElementById("reviewForm");
 
-reviewForm.addEventListener("submit", async function (e) {
+reviewForm.addEventListener("submit", async function(e) {
   e.preventDefault();
 
-  const name = document.getElementById("rName").value.trim();
-  const message = document.getElementById("rMessage").value.trim();
-
-  if (!name || !message) {
-    showToast("Please fill all fields");
-    return;
-  }
+  const name = document.getElementById("rName").value;
+  const message = document.getElementById("rMessage").value;
 
   const data = {
     name,
     message,
-    rating: selectedRating,
+    rating: selectedRating || 5
   };
 
   try {
-    const res = await fetch(
-      "https://backendwithapi.onrender.com/api/reviews",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      }
-    );
+    await fetch("https://backendwithapi.onrender.com/api/reviews", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
 
-    if (!res.ok) throw new Error("Failed");
-
-    showToast("Review submitted successfully ⭐");
-
+    showToast("Review submitted!");
     reviewForm.reset();
-    stars.forEach((s) => s.classList.remove("active"));
-    selectedRating = 5;
-
   } catch (err) {
     showToast("Server error");
   }
 });
-
-// ================= LOAD & DISPLAY REVIEWS =================
-const reviewList = document.getElementById("reviewList");
-
-function renderReview(review) {
-  const card = document.createElement("div");
-  card.className = "review-card big";
-
-  card.innerHTML = `
-    <div class="stars">${"★".repeat(review.rating)}</div>
-    <p>“${review.message}”</p>
-    <h4>- ${review.name}</h4>
-  `;
-
-  reviewList.prepend(card);
-}
-
-async function loadReviews() {
-  try {
-    const res = await fetch("https://backendwithapi.onrender.com/api/reviews");
-    const reviews = await res.json();
-
-    reviews.forEach(renderReview);
-  } catch (err) {
-    console.error("Failed to load reviews");
-  }
-}
-
-// Load on page load
-loadReviews();
-
-
 
 
