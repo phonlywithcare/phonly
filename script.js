@@ -160,5 +160,36 @@ reviewForm.addEventListener("submit", async function (e) {
   }
 });
 
+// ================= LOAD & DISPLAY REVIEWS =================
+const reviewList = document.getElementById("reviewList");
+
+function renderReview(review) {
+  const card = document.createElement("div");
+  card.className = "review-card big";
+
+  card.innerHTML = `
+    <div class="stars">${"★".repeat(review.rating)}</div>
+    <p>“${review.message}”</p>
+    <h4>- ${review.name}</h4>
+  `;
+
+  reviewList.prepend(card);
+}
+
+async function loadReviews() {
+  try {
+    const res = await fetch("https://backendwithapi.onrender.com/api/reviews");
+    const reviews = await res.json();
+
+    reviews.forEach(renderReview);
+  } catch (err) {
+    console.error("Failed to load reviews");
+  }
+}
+
+// Load on page load
+loadReviews();
+
+
 
 
