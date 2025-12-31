@@ -433,6 +433,20 @@
             btn.disabled = false;
         }
     }
+  // whastapp api
+  
+  function sendMsg() {
+  fetch("http://localhost:5000/api/whatsapp/send", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      phone: "91XXXXXXXXXX",
+      message: "✅ Your Phonly booking is confirmed!"
+    })
+  })
+  .then(res => res.json())
+  .then(data => alert("Message Sent"));
+}
   </script>
 </body>
 </html>
