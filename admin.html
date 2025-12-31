@@ -433,19 +433,24 @@
             btn.disabled = false;
         }
     }
-  // whastapp api
-  
-  function sendMsg() {
-  fetch("http://localhost:5000/api/whatsapp/send", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      phone: "91XXXXXXXXXX",
-      message: "✅ Your Phonly booking is confirmed!"
-    })
-  })
-  .then(res => res.json())
-  .then(data => alert("Message Sent"));
+
+    async function updateStatus(status) {
+  if (!selectedBooking) return;
+
+  try {
+    await fetch(`https://backendwithapi.onrender.com/api/bookings/${selectedBooking._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status })
+    });
+
+    showToast(`Status updated & customer notified`);
+    closeModal();
+    loadBookings();
+
+  } catch (err) {
+    showToast("Error updating status", "error");
+  }
 }
   </script>
 </body>
