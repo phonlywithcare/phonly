@@ -354,4 +354,86 @@
             <td class="px-8 py-5 text-right">
                 <button onclick="openModal('${b._id}')" class="bg-white text-slate-700 hover:bg-slate-900 hover:text-white px-5 py-2 rounded-xl text-xs font-bold border border-slate-200 shadow-sm transition-all active:scale-95">
                     View Case
-                </b
+                </button>
+            </td>
+            `;
+            container.appendChild(tr);
+        });
+    }
+
+    function filterBookings() {
+        const q = (document.getElementById('searchInput').value || document.getElementById('mobileSearch').value).toLowerCase();
+        const filtered = allBookings.filter(b => 
+            (b.name || '').toLowerCase().includes(q) || 
+            (b.phone || '').includes(q) || 
+            (b.device || '').toLowerCase().includes(q)
+        );
+        renderTable(filtered);
+    }
+
+    // MODAL LOGIC
+    function openModal(id) {
+        const b = allBookings.find(item => item._id === id);
+        if(!b) return;
+        selectedBooking = b;
+        
+        document.getElementById("modalInitials").innerText = b.name ? b.name.charAt(0).toUpperCase() : '?';
+        document.getElementById("modalName").innerText = b.name;
+        document.getElementById("modalPhone").innerText = b.phone;
+        document.getElementById("modalDevice").querySelector('span').innerText = b.device;
+        document.getElementById("modalIssue").innerText = b.issue || "No description provided.";
+        document.getElementById("modalStatus").innerHTML = getStatusBadge(b.status);
+
+        document.getElementById("modal").classList.remove("hidden");
+    }
+
+    function closeModal() {
+      document.getElementById("modal").classList.add("hidden");
+    }
+
+    async function updateStatus(status) {
+      if(!selectedBooking) return;
+      document.getElementById("modalStatus").innerHTML = getStatusBadge(status); // Optimistic UI
+
+      try {
+        const res = await fetch(`https://backendwithapi.onrender.com/api/bookings/${selectedBooking._id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status })
+        });
+        if(res.ok) {
+            showToast(`Task marked as ${status}`);
+            loadBookings();
+        }
+      } catch(e) {
+        showToast("Cloud sync failed", "error");
+      }
+    }
+
+    async function sendWhatsapp() {
+        const btn = document.getElementById('waButton');
+        const original = btn.innerHTML;
+        btn.innerHTML = '<i class="ph ph-spinner animate-spin text-xl"></i> Pinging...';
+        btn.disabled = true;
+
+        try {
+            await fetch(`https://backendwithapi.onrender.com/api/whatsapp/send`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    phone: selectedBooking.phone, 
+                    name: selectedBooking.name, 
+                    status: selectedBooking.status || 'pending'
+                })
+            });
+            showToast("WhatsApp dispatch successful");
+        } catch(e) {
+            showToast("Failed to send WhatsApp", "error");
+        } finally {
+            btn.innerHTML = original;
+            btn.disabled = false;
+        }
+    }
+  </script>
+</body>
+</html>
