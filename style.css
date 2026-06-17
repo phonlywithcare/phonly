@@ -879,3 +879,85 @@ body.nav-open {
   z-index: 20000;
 }
 
+/* ================= BOOKING SUCCESS MODAL ================= */
+
+.success-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 30000;
+}
+
+.success-modal {
+  background: #ffffff;
+  width: 90%;
+  max-width: 450px;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+  animation: successPop .35s ease;
+}
+
+.success-icon {
+  font-size: 58px;
+  margin-bottom: 10px;
+}
+
+.success-modal h2 {
+  color: #45c647;
+  margin-bottom: 12px;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.success-modal p {
+  color: #666;
+  line-height: 1.6;
+  margin: 8px 0;
+}
+
+.booking-id {
+  margin: 18px 0;
+  padding: 14px;
+  background: #f4fff4;
+  border: 2px dashed #45c647;
+  border-radius: 14px;
+  color: #1d7f1f;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.success-btn {
+  background: #45c647;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: .25s;
+}
+
+.success-btn:hover {
+  background: #33b235;
+  transform: translateY(-2px);
+}
+
+@keyframes successPop {
+  from {
+    opacity: 0;
+    transform: scale(.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

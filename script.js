@@ -71,62 +71,39 @@ if (bookingBtn) {
         body: JSON.stringify(data)
       });
 
-     const result = await res.json();
+    const result = await res.json();
 
 const successModal = document.createElement("div");
 
+successModal.className = "success-modal-overlay";
+
 successModal.innerHTML = `
-  <div style="
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.7);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:99999;
-  ">
-    <div style="
-      background:white;
-      padding:30px;
-      border-radius:15px;
-      text-align:center;
-      max-width:400px;
-      width:90%;
-      box-shadow:0 10px 30px rgba(0,0,0,0.3);
-    ">
-      <h2>🎉 Booking Confirmed!</h2>
+  <div class="success-modal">
 
-      <p>
-        Thank you for choosing <b>Phonly</b>.
-      </p>
+    <div class="success-icon">🎉</div>
 
-      <p>
-        Your Booking ID:
-      </p>
+    <h2>Booking Confirmed!</h2>
 
-      <h3 style="color:#2563eb;">
-        ${result.bookingId}
-      </h3>
+    <p>
+      Thank you for choosing <strong>Phonly</strong>.
+    </p>
 
-      <p>
-        Please save this Booking ID for future reference.
-      </p>
+    <p>
+      Your booking has been successfully submitted.
+    </p>
 
-      <button id="successOkBtn" style="
-        background:#2563eb;
-        color:white;
-        border:none;
-        padding:12px 25px;
-        border-radius:8px;
-        cursor:pointer;
-        font-size:16px;
-      ">
-        OK
-      </button>
+    <div class="booking-id">
+      ${result.bookingId}
     </div>
+
+    <p>
+      Please save this Booking ID for future reference.
+    </p>
+
+    <button id="successOkBtn" class="success-btn">
+      OK, Got It
+    </button>
+
   </div>
 `;
 
